@@ -16,9 +16,20 @@ form.addEventListener('submit', (e) => {
 
 function addTodo(todo) {
     let todoText = input.value
+    let pointValue;
 
     if(todo) {
         todoText = todo.text
+    } else {
+        const matches = todoText.match(/; (\d+)$/);
+        if (matches) {
+            pointValue = matches[1]; // Use the extracted point value
+            todoText = todoText.replace(/; \d+$/, ''); // Remove the point value from the text
+        } else {
+            // Assign a random point value between 10 and 100
+            pointValue = Math.floor(Math.random() * 91) + 10;
+        }
+        todoText += ` (${pointValue})`; // Append the point value to the todo text
     }
 
     if(todoText) {
@@ -27,32 +38,32 @@ function addTodo(todo) {
             todoEl.classList.add('completed')
         }
 
-        todoEl.innerText = todoText
+        todoEl.innerText = todoText;
 
         todoEl.addEventListener('click', () => {
-            todoEl.classList.toggle('completed')
-            updateLS()
-        }) 
+            todoEl.classList.toggle('completed');
+            updateLS();
+        });
 
         todoEl.addEventListener('contextmenu', (e) => {
-            e.preventDefault()
+            e.preventDefault();
 
-            todoEl.remove()
-            updateLS()
-        }) 
+            todoEl.remove();
+            updateLS();
+        });
 
         todosUL.appendChild(todoEl)
 
-        input.value = ''
+        input.value = '';
 
-        updateLS()
+        updateLS();
     }
 }
 
 function updateLS() {
-    todosEl = document.querySelectorAll('li')
+    todosEl = document.querySelectorAll('li');
 
-    const todos = []
+    const todos = [];
 
     todosEl.forEach(todoEl => {
         todos.push({
